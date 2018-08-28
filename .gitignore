@@ -1,15 +1,7 @@
-#  Local .terraform directories
-**/.terraform/*
-
-# .tfstate files
 *.tfstate
-*.tfstate.*
-
-# .tfvars files
-*.tfvars
-
-# TF Plans
-*.plan
-
-# Mac
+*.tfstate.backup
+.terraform/
 .DS_Store
+.idea/*
+*.tfvars
+*.plan
