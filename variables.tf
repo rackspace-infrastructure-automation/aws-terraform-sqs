@@ -34,18 +34,6 @@ variable "receive_wait_time_seconds" {
   default     = 0
 }
 
-variable "policy" {
-  description = "The JSON policy for the SQS queue. (OPTIONAL)"
-  type        = "string"
-  default     = ""
-}
-
-variable "redrive_policy" {
-  description = "The JSON policy to set up the Dead Letter Queue. (OPTIONAL)"
-  type        = "string"
-  default     = ""
-}
-
 variable "fifo_queue" {
   description = "Boolean designating a FIFO queue. If not set, it defaults to false making it standard."
   type        = "string"
@@ -80,4 +68,70 @@ variable "tags" {
   description = "Custom tags to apply to all resources."
   type        = "map"
   default     = {}
+}
+
+########################
+#      Queue Policy    #
+########################
+
+variable "enable_sqs_queue_policy" {
+  description = "Set to true to create a queue policy. Requires role_arn. Allowed values: true, false"
+  type        = "string"
+  default     = false
+}
+
+variable "role_arn" {
+  description = "Enter an EC2 Instance Role allowed to talk with the SQS queue."
+  type        = "string"
+  default     = ""
+}
+
+##########################
+#     Redrive Policy     #
+##########################
+
+variable "enable_redrive_policy" {
+  description = "Set to true to create a redrive policy for dead letter queue. Requires dead_letter_target_arn and dead_letter_url. Allowed values: true, false"
+  type        = "string"
+  default     = false
+}
+
+variable "dead_letter_target_arn" {
+  description = "The Amazon Resource Name (ARN) of the dead-letter queue to which Amazon SQS moves messages"
+  type        = "string"
+  default     = ""
+}
+
+variable "max_receive_count" {
+  description = "The number of times a message is delivered to the source queue before being moved to the dead-letter queue."
+  type        = "string"
+  default     = 3
+}
+
+##########################
+#        Route53         #
+##########################
+
+variable "create_internal_zone_record" {
+  description = "Create Route 53 internal zone record for the SQS QUEUE. i.e true | false"
+  type        = "string"
+  default     = false
+}
+
+variable "internal_record_name" {
+  description = "Record Name for the new Resource Record in the Internal Hosted Zone. i.e. myqueue."
+  type        = "string"
+  default     = ""
+}
+
+variable "internal_zone_name" {
+  description = "TLD for Internal Hosted Zone. i.e. dev.example.com"
+  type        = "string"
+  default     = ""
+}
+
+variable "route_53_hosted_zone_id" {
+  description = "The Route53 Internal Hosted Zone ID."
+  type        = "string"
+  default     = ""
 }
