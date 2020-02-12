@@ -1,9 +1,10 @@
 provider "aws" {
-  version = "~> 1.2"
+  version = "~> 2.1"
   region  = "us-west-2"
 }
 
-data "aws_caller_identity" "current" {}
+data "aws_caller_identity" "current" {
+}
 
 resource "random_string" "queue_string" {
   length  = 18
@@ -35,7 +36,7 @@ module "standard_queue" {
   create_internal_zone_record = true
   internal_record_name        = "standard-queue"
   internal_zone_name          = "${random_string.queue_string.result}-sqs.testqueues.local"
-  route_53_hosted_zone_id     = "${aws_route53_zone.testing-zone.zone_id}"
+  route_53_hosted_zone_id     = aws_route53_zone.testing-zone.zone_id
 }
 
 ########################
@@ -56,7 +57,7 @@ module "encryption_queue" {
   create_internal_zone_record       = true
   internal_record_name              = "encrypted-queue"
   internal_zone_name                = "${random_string.queue_string.result}-sqs.testqueues.local"
-  route_53_hosted_zone_id           = "${aws_route53_zone.testing-zone.zone_id}"
+  route_53_hosted_zone_id           = aws_route53_zone.testing-zone.zone_id
 }
 
 ########################
@@ -77,7 +78,7 @@ module "fifo_queue" {
   create_internal_zone_record = true
   internal_record_name        = "fifo-queue"
   internal_zone_name          = "${random_string.queue_string.result}-sqs.testqueues.local"
-  route_53_hosted_zone_id     = "${aws_route53_zone.testing-zone.zone_id}"
+  route_53_hosted_zone_id     = aws_route53_zone.testing-zone.zone_id
 }
 
 ########################
@@ -100,7 +101,7 @@ module "fifo_encryption_queue" {
   create_internal_zone_record       = true
   internal_record_name              = "encrypted-fifo-queue"
   internal_zone_name                = "${random_string.queue_string.result}-sqs.testqueues.local"
-  route_53_hosted_zone_id           = "${aws_route53_zone.testing-zone.zone_id}"
+  route_53_hosted_zone_id           = aws_route53_zone.testing-zone.zone_id
 }
 
 ########################
@@ -115,7 +116,7 @@ module "deadletter_queue" {
   create_internal_zone_record = true
   internal_record_name        = "deadletter-queue"
   internal_zone_name          = "${random_string.queue_string.result}-sqs.testqueues.local"
-  route_53_hosted_zone_id     = "${aws_route53_zone.testing-zone.zone_id}"
+  route_53_hosted_zone_id     = aws_route53_zone.testing-zone.zone_id
 }
 
 module "dl_source_queue" {
@@ -128,9 +129,10 @@ module "dl_source_queue" {
   enable_sqs_queue_policy     = true
   role_arn                    = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Rackspace"
   enable_redrive_policy       = true
-  dead_letter_target_arn      = "${module.deadletter_queue.arn}"
+  dead_letter_target_arn      = module.deadletter_queue.arn
   create_internal_zone_record = true
   internal_record_name        = "dl-source-queue"
   internal_zone_name          = "${random_string.queue_string.result}-sqs.testqueues.local"
-  route_53_hosted_zone_id     = "${aws_route53_zone.testing-zone.zone_id}"
+  route_53_hosted_zone_id     = aws_route53_zone.testing-zone.zone_id
 }
+

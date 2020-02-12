@@ -1,9 +1,10 @@
 provider "aws" {
-  version = "~> 1.2"
+  version = "~> 2.1"
   region  = "us-east-1"
 }
 
-data "aws_caller_identity" "current" {}
+data "aws_caller_identity" "current" {
+}
 
 module "fifo_encryption_queue" {
   source                            = "git@github.com:rackspace-infrastructure-automation/aws-terraform-sqs//?ref=v0.0.2"
@@ -21,5 +22,5 @@ module "fifo_encryption_queue" {
   create_internal_zone_record       = true
   internal_record_name              = "encrypted-fifo-queue"
   internal_zone_name                = "testqueues.local"
-  route_53_hosted_zone_id           = "${aws_route53_zone.testing-zone.zone_id}"
+  route_53_hosted_zone_id           = aws_route53_zone.testing-zone.zone_id
 }

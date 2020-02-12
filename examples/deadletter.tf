@@ -1,9 +1,10 @@
 provider "aws" {
-  version = "~> 1.2"
+  version = "~> 2.1"
   region  = "us-east-1"
 }
 
-data "aws_caller_identity" "current" {}
+data "aws_caller_identity" "current" {
+}
 
 resource "aws_route53_zone" "testing-zone" {
   name = "testqueues.local"
@@ -17,7 +18,7 @@ module "deadletter_queue" {
   create_internal_zone_record = true
   internal_record_name        = "deadletter-queue"
   internal_zone_name          = "testqueues.local"
-  route_53_hosted_zone_id     = "${aws_route53_zone.testing-zone.zone_id}"
+  route_53_hosted_zone_id     = aws_route53_zone.testing-zone.zone_id
 }
 
 module "dl_source_queue" {
@@ -30,9 +31,10 @@ module "dl_source_queue" {
   enable_sqs_queue_policy     = true
   role_arn                    = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Rackspace"
   enable_redrive_policy       = true
-  dead_letter_target_arn      = "${module.deadletter_queue.arn}"
+  dead_letter_target_arn      = module.deadletter_queue.arn
   create_internal_zone_record = true
   internal_record_name        = "myqueue"
   internal_zone_name          = "testqueues.local"
-  route_53_hosted_zone_id     = "${aws_route53_zone.testing-zone.zone_id}"
+  route_53_hosted_zone_id     = aws_route53_zone.testing-zone.zone_id
 }
+
