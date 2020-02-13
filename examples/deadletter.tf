@@ -1,3 +1,7 @@
+terraform {
+  required_version = ">= 0.12"
+}
+
 provider "aws" {
   version = "~> 2.1"
   region  = "us-east-1"
@@ -11,7 +15,7 @@ resource "aws_route53_zone" "testing-zone" {
 }
 
 module "deadletter_queue" {
-  source                      = "git@github.com:rackspace-infrastructure-automation/aws-terraform-sqs//?ref=v0.0.2"
+  source                      = "git@github.com:rackspace-infrastructure-automation/aws-terraform-sqs//?ref=v0.12.0"
   name                        = "myqueue_deadletter"
   enable_sqs_queue_policy     = true
   role_arn                    = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Rackspace"
@@ -22,7 +26,7 @@ module "deadletter_queue" {
 }
 
 module "dl_source_queue" {
-  source                      = "git@github.com:rackspace-infrastructure-automation/aws-terraform-sqs//?ref=v0.0.2"
+  source                      = "git@github.com:rackspace-infrastructure-automation/aws-terraform-sqs//?ref=v0.12.0"
   name                        = "myqueue"
   delay_seconds               = 90
   max_message_size            = 2048

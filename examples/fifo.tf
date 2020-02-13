@@ -1,3 +1,7 @@
+terraform {
+  required_version = ">= 0.12"
+}
+
 provider "aws" {
   version = "~> 2.1"
   region  = "us-east-1"
@@ -7,7 +11,7 @@ data "aws_caller_identity" "current" {
 }
 
 module "fifo_queue" {
-  source                      = "git@github.com:rackspace-infrastructure-automation/aws-terraform-sqs//?ref=v0.0.2"
+  source                      = "git@github.com:rackspace-infrastructure-automation/aws-terraform-sqs//?ref=v0.12.0"
   name                        = "fifo-queue.fifo"
   delay_seconds               = 90
   max_message_size            = 2048

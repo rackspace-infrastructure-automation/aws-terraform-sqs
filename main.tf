@@ -7,7 +7,7 @@
  *
  *```
  *module "standard_queue" {
- *  source                      = "git@github.com:rackspace-infrastructure-automation/aws-terraform-sqs//?ref=v0.0.2"
+ *  source                      = "git@github.com:rackspace-infrastructure-automation/aws-terraform-sqs//?ref=v0.12.0"
  *  name                        = "myqueue"
  *  delay_seconds               = 90
  *  max_message_size            = 2048
