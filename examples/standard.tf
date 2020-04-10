@@ -3,14 +3,14 @@ terraform {
 }
 
 provider "aws" {
-  version = "~> 2.1"
+  version = "~> 2.7"
   region  = "us-east-1"
 }
 
 data "aws_caller_identity" "current" {
 }
 
-resource "aws_route53_zone" "testing-zone" {
+resource "aws_route53_zone" "testing_zone" {
   name = "testqueues.local"
 }
 
@@ -27,6 +27,6 @@ module "standard_queue" {
   message_retention_seconds   = 86400
   receive_wait_time_seconds   = 10
   role_arn                    = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Rackspace"
-  route_53_hosted_zone_id     = aws_route53_zone.testing-zone.zone_id
+  route_53_hosted_zone_id     = aws_route53_zone.testing_zone.zone_id
 }
 
