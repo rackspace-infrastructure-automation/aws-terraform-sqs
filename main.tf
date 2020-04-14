@@ -24,13 +24,29 @@
  * ```
  *
  * Full working references are available at [examples](examples)
+ *
+ * ## Terraform 0.12 upgrade
+ *
+ * Several changes were required while adding terraform 0.12 compatibility.  The following changes should be
+ * made when upgrading from a previous release to version 0.12.0 or higher.
+ *
+ * ### Terraform State File
+ *
+ * Several resources were updated with new logical names, better meet current Rackspace style guides.
+ * The following statements can be used to update existing resources.  In each command, `<MODULE_NAME>`
+ * should be replaced with the logic name used where the module is referenced.
+ *
+ * ```
+ * terraform state mv module.<MODULE_NAME>.aws_sqs_queue.MyQueue module.<MODULE_NAME>.aws_sqs_queue.queue
+ * terraform state mv module.<MODULE_NAME>.aws_sqs_queue_policy.sqs-policy module.<MODULE_NAME>.aws_sqs_queue_policy.sqs_policy
+ * ```
  */
 
 terraform {
   required_version = ">= 0.12"
 
   required_providers {
-    aws = ">= 2.1.0"
+    aws = ">= 2.7.0"
   }
 }
 
@@ -44,7 +60,7 @@ locals {
   redrive_policy = "{\"deadLetterTargetArn\":\"${var.dead_letter_target_arn}\",\"maxReceiveCount\":${var.max_receive_count}}"
 }
 
-resource "aws_sqs_queue" "MyQueue" {
+resource "aws_sqs_queue" "queue" {
   content_based_deduplication       = var.content_based_deduplication
   delay_seconds                     = var.delay_seconds
   fifo_queue                        = var.fifo_queue
@@ -60,10 +76,10 @@ resource "aws_sqs_queue" "MyQueue" {
 }
 
 # SQS Queue Policy.
-resource "aws_sqs_queue_policy" "sqs-policy" {
+resource "aws_sqs_queue_policy" "sqs_policy" {
   count = var.enable_sqs_queue_policy ? 1 : 0
 
-  queue_url = aws_sqs_queue.MyQueue.id
+  queue_url = aws_sqs_queue.queue.id
 
   policy = <<POLICY
 {
@@ -76,7 +92,7 @@ resource "aws_sqs_queue_policy" "sqs-policy" {
         "sqs:DeleteMessage"
       ],
       "Resource": [
-        "${aws_sqs_queue.MyQueue.arn}"
+        "${aws_sqs_queue.queue.arn}"
       ],
       "Effect": "Allow",
       "Principal": {
@@ -96,7 +112,7 @@ resource "aws_route53_record" "zone_record_alias" {
   count = var.create_internal_zone_record ? 1 : 0
 
   name    = "${var.internal_record_name}.${var.internal_zone_name}"
-  records = [aws_sqs_queue.MyQueue.id]
+  records = [aws_sqs_queue.queue.id]
   ttl     = 300
   type    = "CNAME"
   zone_id = var.route_53_hosted_zone_id

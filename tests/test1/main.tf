@@ -19,7 +19,7 @@ resource "random_string" "queue_string" {
 ########################
 #       Route53        #
 ########################
-resource "aws_route53_zone" "testing-zone" {
+resource "aws_route53_zone" "testing_zone" {
   force_destroy = true
   name          = "${random_string.queue_string.result}-sqs.testqueues.local"
 }
@@ -38,10 +38,10 @@ module "standard_queue" {
   internal_zone_name          = "${random_string.queue_string.result}-sqs.testqueues.local"
   max_message_size            = 2048
   message_retention_seconds   = 86400
-  name                        = "${random_string.queue_string.result}-standard-queue"
+  name                        = "${random_string.queue_string.result}-test-standard-queue"
   receive_wait_time_seconds   = 10
   role_arn                    = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Rackspace"
-  route_53_hosted_zone_id     = aws_route53_zone.testing-zone.zone_id
+  route_53_hosted_zone_id     = aws_route53_zone.testing_zone.zone_id
 }
 
 ########################
@@ -58,12 +58,12 @@ module "encryption_queue" {
   internal_zone_name                = "${random_string.queue_string.result}-sqs.testqueues.local"
   kms_data_key_reuse_period_seconds = 300
   kms_key_id                        = "alias/aws/sqs"
-  name                              = "${random_string.queue_string.result}-encrypted-queue"
+  name                              = "${random_string.queue_string.result}-test-encrypted-queue"
   max_message_size                  = 2048
   message_retention_seconds         = 86400
   receive_wait_time_seconds         = 10
   role_arn                          = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Rackspace"
-  route_53_hosted_zone_id           = aws_route53_zone.testing-zone.zone_id
+  route_53_hosted_zone_id           = aws_route53_zone.testing_zone.zone_id
 }
 
 ########################
@@ -80,12 +80,12 @@ module "fifo_queue" {
   fifo_queue                  = true
   internal_record_name        = "fifo-queue"
   internal_zone_name          = "${random_string.queue_string.result}-sqs.testqueues.local"
-  name                        = "${random_string.queue_string.result}-fifo-queue.fifo"
+  name                        = "${random_string.queue_string.result}-test-fifo-queue.fifo"
   max_message_size            = 2048
   message_retention_seconds   = 86400
   receive_wait_time_seconds   = 10
   role_arn                    = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Rackspace"
-  route_53_hosted_zone_id     = aws_route53_zone.testing-zone.zone_id
+  route_53_hosted_zone_id     = aws_route53_zone.testing_zone.zone_id
 }
 
 ########################
@@ -106,10 +106,10 @@ module "fifo_encryption_queue" {
   kms_key_id                        = "alias/aws/sqs"
   max_message_size                  = 2048
   message_retention_seconds         = 86400
-  name                              = "${random_string.queue_string.result}-encrypted-fifo-queue.fifo"
+  name                              = "${random_string.queue_string.result}-test-encrypted-fifo-queue.fifo"
   receive_wait_time_seconds         = 10
   role_arn                          = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Rackspace"
-  route_53_hosted_zone_id           = aws_route53_zone.testing-zone.zone_id
+  route_53_hosted_zone_id           = aws_route53_zone.testing_zone.zone_id
 }
 
 ########################
@@ -123,9 +123,9 @@ module "deadletter_queue" {
   enable_sqs_queue_policy     = true
   internal_record_name        = "deadletter-queue"
   internal_zone_name          = "${random_string.queue_string.result}-sqs.testqueues.local"
-  name                        = "${random_string.queue_string.result}-deadletter-queue"
+  name                        = "${random_string.queue_string.result}-test-deadletter-queue"
   role_arn                    = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Rackspace"
-  route_53_hosted_zone_id     = aws_route53_zone.testing-zone.zone_id
+  route_53_hosted_zone_id     = aws_route53_zone.testing_zone.zone_id
 }
 
 module "dl_source_queue" {
@@ -138,11 +138,10 @@ module "dl_source_queue" {
   enable_sqs_queue_policy     = true
   internal_record_name        = "dl-source-queue"
   internal_zone_name          = "${random_string.queue_string.result}-sqs.testqueues.local"
-  name                        = "${random_string.queue_string.result}-dl-source-queue"
+  name                        = "${random_string.queue_string.result}-test-dl-source-queue"
   max_message_size            = 2048
   message_retention_seconds   = 86400
   receive_wait_time_seconds   = 10
   role_arn                    = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Rackspace"
-  route_53_hosted_zone_id     = aws_route53_zone.testing-zone.zone_id
+  route_53_hosted_zone_id     = aws_route53_zone.testing_zone.zone_id
 }
-

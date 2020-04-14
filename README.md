@@ -24,11 +24,27 @@ module "standard_queue" {
 
 Full working references are available at [examples](examples)
 
+## Terraform 0.12 upgrade
+
+Several changes were required while adding terraform 0.12 compatibility.  The following changes should be  
+made when upgrading from a previous release to version 0.12.0 or higher.
+
+### Terraform State File
+
+Several resources were updated with new logical names, better meet current Rackspace style guides.  
+The following statements can be used to update existing resources.  In each command, `<MODULE_NAME>`  
+should be replaced with the logic name used where the module is referenced.
+
+```
+terraform state mv module.<MODULE_NAME>.aws_sqs_queue.MyQueue module.<MODULE_NAME>.aws_sqs_queue.queue
+terraform state mv module.<MODULE_NAME>.aws_sqs_queue_policy.sqs-policy module.<MODULE_NAME>.aws_sqs_queue_policy.sqs_policy
+```
+
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | >= 2.1.0 |
+| aws | >= 2.7.0 |
 
 ## Inputs
 
