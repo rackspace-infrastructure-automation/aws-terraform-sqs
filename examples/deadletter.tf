@@ -1,10 +1,16 @@
 terraform {
-  required_version = ">= 0.12"
+  required_version = ">= 0.13"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 4.0"
+    }
+  }
 }
 
 provider "aws" {
-  version = "~> 2.7"
-  region  = "us-east-1"
+  region = "us-east-1"
 }
 
 data "aws_caller_identity" "current" {
@@ -15,7 +21,7 @@ resource "aws_route53_zone" "testing_zone" {
 }
 
 module "deadletter_queue" {
-  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-sqs//?ref=v0.12.0"
+  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-sqs//?ref=v0.12.3"
 
   create_internal_zone_record = true
   enable_sqs_queue_policy     = true
@@ -27,7 +33,7 @@ module "deadletter_queue" {
 }
 
 module "dl_source_queue" {
-  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-sqs//?ref=v0.12.0"
+  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-sqs//?ref=v0.12.3"
 
   create_internal_zone_record = true
   dead_letter_target_arn      = module.deadletter_queue.arn
