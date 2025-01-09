@@ -6,7 +6,7 @@ This module sets up a sqs-queue with varying options including deadletter, fifo,
 
 ```
 module "standard_queue" {
-  source                      = "git@github.com:rackspace-infrastructure-automation/aws-terraform-sqs//?ref=v0.12.0"
+  source                      = "git@github.com:rackspace-infrastructure-automation/aws-terraform-sqs//?ref=v0.12.3"
 
   create_internal_zone_record = true
   delay_seconds               = 90
@@ -40,16 +40,35 @@ terraform state mv module.<MODULE_NAME>.aws_sqs_queue.MyQueue module.<MODULE_NAM
 terraform state mv module.<MODULE_NAME>.aws_sqs_queue_policy.sqs-policy module.<MODULE_NAME>.aws_sqs_queue_policy.sqs_policy
 ```
 
+## Requirements
+
+| Name | Version |
+|------|---------|
+| terraform | >= 0.13 |
+| aws | >= 4.0 |
+
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | >= 2.7.0 |
+| aws | >= 4.0 |
+
+## Modules
+
+No Modules.
+
+## Resources
+
+| Name |
+|------|
+| [aws_route53_record](https://registry.terraform.io/providers/hashicorp/aws/4.0/docs/resources/route53_record) |
+| [aws_sqs_queue](https://registry.terraform.io/providers/hashicorp/aws/4.0/docs/resources/sqs_queue) |
+| [aws_sqs_queue_policy](https://registry.terraform.io/providers/hashicorp/aws/4.0/docs/resources/sqs_queue_policy) |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
+|------|-------------|------|---------|:--------:|
 | content\_based\_deduplication | Enables content-based deduplication for FIFO queues. | `bool` | `false` | no |
 | create\_internal\_zone\_record | Create Route 53 internal zone record for the SQS QUEUE. i.e true \| false | `bool` | `false` | no |
 | dead\_letter\_target\_arn | The Amazon Resource Name (ARN) of the dead-letter queue to which Amazon SQS moves messages | `string` | `""` | no |
@@ -78,4 +97,3 @@ terraform state mv module.<MODULE_NAME>.aws_sqs_queue_policy.sqs-policy module.<
 |------|-------------|
 | arn | The ARN of the SQS queue |
 | id | The URL for the created Amazon SQS queue. |
-
